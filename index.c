@@ -181,15 +181,10 @@ int index_load(Index *index) {
 //
 // Returns 0 on success, -1 on error.
 static int compare_index_entries_by_path(const void *a, const void *b) {
-
+    const IndexEntry *ea = (const IndexEntry *)a;
+    const IndexEntry *eb = (const IndexEntry *)b;
+    return strcmp(ea->path, eb->path);
 }
-
-
-
-
-
-
-
 
 int index_save(const Index *index) {
     IndexEntry *sorted_entries = NULL;
