@@ -175,7 +175,16 @@ static int write_tree_level(const Index *index, const char *prefix, ObjectID *id
     int dir_count = 0;
     size_t prefix_len = strlen(prefix);
 
-    
+    for (int i = 0; i < index->count; i++) {
+        const char *path = index->entries[i].path;
+        if (strncmp(path, prefix, prefix_len) != 0) continue;
+
+        const char *rest = path + prefix_len;
+        if (*rest == '\0') continue;
+
+        const char *slash = strchr(rest, '/');
+        
+        }
 
         size_t dlen = (size_t)(slash - rest);
         if (dlen == 0 || dlen >= sizeof(dir_names[0])) return -1;
