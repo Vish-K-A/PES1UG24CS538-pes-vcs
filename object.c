@@ -180,5 +180,10 @@ int object_read(const ObjectID *id, ObjectType *type_out,
     *data_out = malloc(data_len + 1);   // +1 for safe null terminator
     if (!*data_out) { free(buf); return -1; }
 
+    memcpy(*data_out, data_start, data_len);
+    ((uint8_t *)*data_out)[data_len] = '\0';
+    *len_out = data_len;
+
+    free(buf);
     return 0;
 }
