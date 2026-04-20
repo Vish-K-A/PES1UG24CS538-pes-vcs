@@ -173,7 +173,12 @@ int object_read(const ObjectID *id, ObjectType *type_out,
     else if (strncmp((char*)buf, "commit ", 7) == 0) *type_out = OBJ_COMMIT;
     else { free(buf); return -1; }
 
+    // 6. Extract the data portion (everything after the null byte)
+    uint8_t *data_start = null_pos + 1;
+    size_t data_len = file_size - (size_t)(data_start - buf);
 
-    
+    *data_out = malloc(data_len + 1);   // +1 for safe null terminator
+    if (!*data_out) { free(buf); return -1; }
+
     return 0;
 }
