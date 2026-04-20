@@ -183,7 +183,17 @@ static int write_tree_level(const Index *index, const char *prefix, ObjectID *id
         if (*rest == '\0') continue;
 
         const char *slash = strchr(rest, '/');
-        
+        if (!slash) {
+            if (tree.count >= MAX_TREE_ENTRIES) return -1;
+            if (strlen(rest) >= sizeof(tree.entries[tree.count].name)) return -1;
+
+            tree.entries[tree.count].mode = index->entries[i].mode;
+            tree.entries[tree.count].hash = index->entries[i].hash;
+            snprintf(tree.entries[tree.count].name,
+                     sizeof(tree.entries[tree.count].name),
+                     "%s", rest);
+            tree.count++;
+            continue;
         }
 
         size_t dlen = (size_t)(slash - rest);
